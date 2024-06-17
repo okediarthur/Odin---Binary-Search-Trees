@@ -133,6 +133,38 @@ class Tree{
     postOrder(callback){
         return this._traverse(this.root, callback, 'post');
     }
+
+    height(node){
+        if(node === null) return -1;
+        const leftHeight = this.height(node.left);
+        const rightHeight = this.height(node.right);
+        return Math.max(leftHeight, rightHeight) + 1;
+    }
+
+    depth(node, current = this.root, currentDepth = 0){
+        if(current === null) return -1;
+        if(current === node) return currentDepth;
+
+        const leftDepth = this.depth(node, current.left, currentDepth + 1);
+        if(leftDepth !== -1) return leftDepth;
+
+        return this.depth(node, current.right, currentDepth + 1);
+    } 
+
+    isBalanced(node = this.root){
+        if(node === null) return true;
+
+        const leftHeight = this.height(node.left);
+        const rightHeight = this.height(node.right);
+
+        const isCurrentNodeBalanced = Math.abs(leftHeight - rightHeight) <= 1;
+        return isCurrentNodeBalanced && this.isBalanced(node.left) && this.isBalanced(node.right);
+    }
+
+    rebalance(){
+        const nodes = this.inOrder();
+        this.root = this.buildTree(nodes);
+    }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -176,3 +208,30 @@ console.log('Pre-order traversal:', preOrderResult);
 // Post-order traversal
 const postOrderResult = tree.postOrder();
 console.log('Post-order traversal:', postOrderResult);
+
+// Height of a node
+const height = tree.height(tree.root);
+console.log('Height of the tree:', height);
+
+// Depth of a node
+const depth = tree.depth(tree.root.left);
+console.log('Depth of the left child of the root:', depth);
+
+// Check if tree is balanced
+const isBalanced = tree.isBalanced();
+console.log('Is the tree balanced?', isBalanced);
+
+// Rebalance the tree
+tree.insert(100);
+tree.insert(101);
+tree.insert(102);
+tree.insert(3);
+tree.insert(2.2);
+tree.insert(1.5);
+
+prettyPrint(tree.root);
+console.log('Is the treebalanced after inserting unbalancing nodes?', tree.isBalanced());
+
+tree.isBalanced();
+prettyPrint(tree.root);
+console.log('Is the tree balanced after rebalancing?',tree.isBalanced());
