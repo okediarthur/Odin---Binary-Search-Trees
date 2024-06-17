@@ -7,7 +7,7 @@ class Node{
 }
 
 class Tree{
-    constructor(){
+    constructor(array){
         this.root = this.buildTree([...new Set(array)].sort((a, b) => a - b));
     }
 
@@ -180,58 +180,43 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
     }
 };
 
+// Function to generate an array of random numbers
+const generateRandomArray = (size, max) => {
+    return Array.from({ length: size }, () => Math.floor(Math.random() * max));
+};
 
-// Example Usage
-const array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-const tree = new Tree(array);
+// Driver Script
+const randomArray = generateRandomArray(15, 100);
+const tree = new Tree(randomArray);
 
-tree.insert(10);
+console.log('Initial tree:');
 prettyPrint(tree.root);
 
-tree.deleteItem(7);
+console.log('Is the tree balanced?', tree.isBalanced());
+
+console.log('Level order traversal:', tree.levelOrder());
+console.log('Pre-order traversal:', tree.preOrder());
+console.log('In-order traversal:', tree.inOrder());
+console.log('Post-order traversal:', tree.postOrder());
+
+// Unbalance the tree
+tree.insert(150);
+tree.insert(200);
+tree.insert(250);
+
+console.log('tree after adding numbers > 100:');
 prettyPrint(tree.root);
 
-const foundNode = tree.find(9);
-console.log('Found node:', foundNode);
+console.log('Is the tree balanced?',tree.isBalanced());
 
-const levelOrderResult = tree.levelOrder();
-console.log('Level Order traversal:', levelOrderResult);
+tree.rebalance();
 
-// In-order traversal
-const inOrderResult = tree.inOrder();
-console.log('In-order traversal:', inOrderResult);
-
-// Pre-order traversal
-const preOrderResult = tree.preOrder();
-console.log('Pre-order traversal:', preOrderResult);
-
-// Post-order traversal
-const postOrderResult = tree.postOrder();
-console.log('Post-order traversal:', postOrderResult);
-
-// Height of a node
-const height = tree.height(tree.root);
-console.log('Height of the tree:', height);
-
-// Depth of a node
-const depth = tree.depth(tree.root.left);
-console.log('Depth of the left child of the root:', depth);
-
-// Check if tree is balanced
-const isBalanced = tree.isBalanced();
-console.log('Is the tree balanced?', isBalanced);
-
-// Rebalance the tree
-tree.insert(100);
-tree.insert(101);
-tree.insert(102);
-tree.insert(3);
-tree.insert(2.2);
-tree.insert(1.5);
-
+console.log('Tree after rebalancing:');
 prettyPrint(tree.root);
-console.log('Is the treebalanced after inserting unbalancing nodes?', tree.isBalanced());
 
-tree.isBalanced();
-prettyPrint(tree.root);
-console.log('Is the tree balanced after rebalancing?',tree.isBalanced());
+console.log('Is the tree balanced?', tree.isBalanced());
+
+console.log('Level ordertraversal:', tree.levelOrder());
+console.log('Pre-ordertraversal:', tree.preOrder());
+console.log('In-ordertraversal:', tree.inOrder());
+console.log('Post-ordertraversal:', tree.postOrder());
